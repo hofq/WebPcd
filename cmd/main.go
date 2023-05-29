@@ -1,13 +1,17 @@
 package main
 
 import (
+	"webpcd/converter"
 	"webpcd/filesystem"
 )
 
 func main() {
-	var w *filesystem.FsRead
-	w = filesystem.NewWatcher()
+
+	w := filesystem.NewWatcher()
 	w.Run()
-	w.Log()
 	defer w.Watcher.Close()
+
+	c := converter.New("C:\\Users\\<user>\\Downloads\\", false)
+	go c.Convert(w.Stream)
+	<-make(chan struct{})
 }
