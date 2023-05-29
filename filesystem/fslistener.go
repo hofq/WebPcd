@@ -28,8 +28,16 @@ func (f *FsRead) Run() {
 
 	f.Stream = make(chan string)
 
-	// Start listening for events.
+	// Add a path.
+	// err = watcher.Add("%userprofile%\\Downloads")
+	var err error
+	err = f.Watcher.Add("C:\\Users\\<user>\\Downloads")
+	fmt.Println("Set Download Path")
+	if err != nil {
+		log.Fatal(err)
+	}
 	go func() {
+		// Start listening for events.
 		for {
 			select {
 			case event, ok := <-f.Watcher.Events:
@@ -39,6 +47,9 @@ func (f *FsRead) Run() {
 				if event.Has(fsnotify.Write) {
 					if event.Name[len(event.Name)-4:] == "webp" {
 						f.Stream <- event.Name
+						fmt.Println("Detected WebP File: ", event.Name)
+					} else {
+						fmt.Println("Detected Change in Path")
 					}
 				}
 			case err, ok := <-f.Watcher.Errors:
@@ -49,14 +60,7 @@ func (f *FsRead) Run() {
 			}
 		}
 	}()
-
-	// Add a path.
-	// err = watcher.Add("%userprofile%\\Downloads")
-	var err error
-	err = f.Watcher.Add("C:\\Users\\<user>\\Downloads")
-	if err != nil {
-		log.Fatal(err)
-	}
+	fmt.Println("Exit Loop")
 
 }
 func (f *FsRead) Log() {
