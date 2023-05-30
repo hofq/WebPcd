@@ -5,16 +5,21 @@ The Application Converts all WebP Files in your Specified Folder to the Next bes
 
 ## Options
 ### RMOriginal
+
 Default: `RMOriginal: false` Specifies if the Original File should be kept
 ### exclude_format (not yet implemented)
+
 Default: `Not Set`
 Example: `exclude_format: png,gif,jpg` Can be used to specify unwanted Image Formats
 ### use_format (not yet implemented)
 Can be used to specify the wanted Image Formats
+
 Default: `use_format: png,gif,jpg`
 ### OutputPath
 Specifies the Path where the Converted Images Should be saved
+
 Default: `OutputPath: "<Your Home Dir>/Downloads/"` Can be specified as a var
 ### InputPath
 Specifies the Path where the System should look for new files
+
 Default: `InputPath: "<Your Home Dir>/Downloads/"` Can be specified as a var
