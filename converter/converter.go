@@ -6,28 +6,48 @@ import (
 	"image/png"
 	"io"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
 
 	"golang.org/x/image/webp"
+	"gopkg.in/yaml.v2"
 )
 
 type Converter struct {
 	// Output Path
-	Output string
-	// Should the Original WebP File be Removed
-	RMOriginal bool
+	Output string `yaml:"OutputPath"`
+	// Should the Original WebP File be Removed, not yet implemented
+	RMOriginal bool `yaml:"RemoveOriginal"`
 
 	// Remember last File's Hash so there will be only 1 output
 	LastFile string
 }
 
-func New(output string, rmoriginal bool) *Converter {
-	return &Converter{
-		Output:     output,
-		RMOriginal: rmoriginal,
+func New(configpath string) *Converter {
+	file, err := os.Open(configpath)
+	if err != nil {
+		fmt.Println(err)
 	}
+	homedir, err := os.UserHomeDir()
+	if err != nil {
+		fmt.Println(err)
+	}
+	converter := &Converter{
+		Output:     filepath.FromSlash(homedir + "/Downloads/"),
+		RMOriginal: false,
+	}
+	if err != nil {
+		fmt.Println()
+	}
+	defer file.Close()
+	d := yaml.NewDecoder(file)
+	if err := d.Decode(&converter); err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	return converter
 }
 
 func (c *Converter) GetFilename(dec string) string {

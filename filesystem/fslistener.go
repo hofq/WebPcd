@@ -3,25 +3,46 @@ package filesystem
 import (
 	"fmt"
 	"log"
+	"os"
+	"path/filepath"
 
 	"github.com/fsnotify/fsnotify"
+	"gopkg.in/yaml.v2"
 )
 
 type FsRead struct {
-	Watcher *fsnotify.Watcher
-	Stream  chan string
+	Watcher   *fsnotify.Watcher
+	Stream    chan string
+	InputPath string `yaml:"InputPath"`
 }
 
-func NewWatcher() *FsRead {
+func NewWatcher(configpath string) *FsRead {
 
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	return &FsRead{
-		Watcher: watcher,
+	homedir, err := os.UserHomeDir()
+	if err != nil {
+		fmt.Println(err)
 	}
+
+	fsread := &FsRead{
+		Watcher:   watcher,
+		InputPath: filepath.FromSlash(homedir + "/Downloads/"),
+	}
+	file, err := os.Open(configpath)
+	if err != nil {
+		fmt.Println()
+	}
+	defer file.Close()
+	d := yaml.NewDecoder(file)
+	if err := d.Decode(&fsread); err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	fmt.Println("1", fsread.InputPath)
+	return fsread
 }
 
 func (f *FsRead) Run() {
@@ -31,7 +52,7 @@ func (f *FsRead) Run() {
 	// Add a path.
 	// err = watcher.Add("%userprofile%\\Downloads")
 	var err error
-	err = f.Watcher.Add("C:\\Users\\<user>\\Downloads")
+	err = f.Watcher.Add(f.InputPath)
 	fmt.Println("Set Download Path")
 	if err != nil {
 		log.Fatal(err)
@@ -60,7 +81,6 @@ func (f *FsRead) Run() {
 			}
 		}
 	}()
-	fmt.Println("Exit Loop")
 
 }
 func (f *FsRead) Log() {
