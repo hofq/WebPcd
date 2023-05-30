@@ -39,14 +39,12 @@ func NewWatcher(configpath string) *FsRead {
 	d := yaml.NewDecoder(file)
 	if err := d.Decode(&fsread); err != nil {
 		fmt.Println(err)
-		return nil
+		//		return nil
 	}
-	fmt.Println("1", fsread.InputPath)
 	return fsread
 }
 
 func (f *FsRead) Run() {
-
 	f.Stream = make(chan string)
 
 	// Add a path.
