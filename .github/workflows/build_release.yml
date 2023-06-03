@@ -15,6 +15,9 @@ jobs:
       - name: Display Go version
         run: go version
 
+      - name: Install Deps
+        run: sudo apt-get install -y libappindicator3-dev gir1.2-appindicator3-0.1
+        
       - name: Build
         run: go build -v ./...
 
