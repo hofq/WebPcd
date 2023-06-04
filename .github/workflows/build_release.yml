@@ -15,10 +15,26 @@ jobs:
       - name: Display Go version
         run: go version
 
+
       - name: Install Deps
         run: sudo apt-get install -y libayatana-appindicator3-dev
 
-      - name: Build
-        run: go build -v ./...
+      - name: Build for Linux
+        run: GOOS=linux GOARCH=amd64 go build -o webpcd-amd64-linux -v ./...
+
+      - name: Build for Darwin
+        run: GOOS=darwin GOARCH=amd64 go build -o webpcd-amd64-darwin -v ./...
+
+      - name: Build for Windows
+        run: GOOS=windows GOARCH=amd64 go build -o webpcd-amd64-windows.exe -v ./...
+
+
+      - name: Attach Artefacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: builds
+          path: webpcd*
+        
+
 
 
