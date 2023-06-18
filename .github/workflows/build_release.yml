@@ -1,5 +1,8 @@
 on: [push]
-
+env: 
+  WIN_BUILD_NAME: webpcd-windows-x64.exe
+  MAC_BUILD_NAME: webpcd-macos-x64
+  GNU_BUILD_NAME: webpcd-linux-x64
 jobs:
   build:
 
@@ -22,20 +25,32 @@ jobs:
         run: sudo apt-get install -y libayatana-appindicator3-dev
 
       - name: Build for Linux
-        run: GOOS=linux GOARCH=amd64 go build -o output/webpcd-linux-x64 cmd/main.go
+        run: GOOS=linux GOARCH=amd64 go build -o output/$GNU_BUILD_NAME cmd/main.go
 
  #     - name: Build for Darwin
  #       run: GOOS=darwin GOARCH=amd64 go build -o output/webpcd-macos-x64 cmd/main.go 
 
       - name: Build for Windows
-        run: GOOS=windows GOARCH=amd64 go build -o output/webpcd-windows-x64.exe cmd/main.go 
+        run: GOOS=windows GOARCH=amd64 go build -o output/$WIN_BUILD_NAME cmd/main.go 
 
 
-      - name: Attach Artefacts
+      - name: Attach Win Build
         uses: actions/upload-artifact@v3
         with:
-          name: builds
-          path: output/*
+          name: $WIN_BUILD_NAME
+          path: output/$WIN_BUILD_NAME
+
+#      - name: Attach Darwin Build
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: $MAC_BUILD_NAME
+#          path: output/$MAC_BUILD_NAME
+
+      - name: Attach Linux Build
+        uses: actions/upload-artifact@v3
+        with:
+          name: $GNU_BUILD_NAME
+          path: output/$GNU_BUILD_NAME
         
 
 
