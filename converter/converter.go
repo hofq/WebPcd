@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"golang.org/x/image/webp"
-	"gopkg.in/yaml.v2"
 )
 
 type Converter struct {
@@ -25,11 +24,7 @@ type Converter struct {
 	LastFile string
 }
 
-func New(configpath string) *Converter {
-	file, err := os.Open(configpath)
-	if err != nil {
-		fmt.Println(err)
-	}
+func New() *Converter {
 	homedir, err := os.UserHomeDir()
 	if err != nil {
 		fmt.Println(err)
@@ -37,15 +32,7 @@ func New(configpath string) *Converter {
 	converter := &Converter{
 		Output:     filepath.FromSlash(homedir + "/Downloads/"),
 		RMOriginal: false,
-	}
-	if err != nil {
-		fmt.Println()
-	}
-	defer file.Close()
-	d := yaml.NewDecoder(file)
-	if err := d.Decode(&converter); err != nil {
-		fmt.Println(err)
-		return nil
+		LastFile:   "",
 	}
 	return converter
 }
