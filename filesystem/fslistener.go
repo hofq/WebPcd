@@ -7,16 +7,15 @@ import (
 	"path/filepath"
 
 	"github.com/fsnotify/fsnotify"
-	"gopkg.in/yaml.v2"
 )
 
 type FsRead struct {
 	Watcher   *fsnotify.Watcher
 	Stream    chan string
-	InputPath string `yaml:"InputPath"`
+	InputPath string
 }
 
-func NewWatcher(configpath string) *FsRead {
+func NewWatcher() *FsRead {
 
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
@@ -31,16 +30,7 @@ func NewWatcher(configpath string) *FsRead {
 		Watcher:   watcher,
 		InputPath: filepath.FromSlash(homedir + "/Downloads/"),
 	}
-	file, err := os.Open(configpath)
-	if err != nil {
-		fmt.Println()
-	}
-	defer file.Close()
-	d := yaml.NewDecoder(file)
-	if err := d.Decode(&fsread); err != nil {
-		fmt.Println(err)
-		//		return nil
-	}
+
 	return fsread
 }
 
