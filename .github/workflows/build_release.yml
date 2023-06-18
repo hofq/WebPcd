@@ -25,32 +25,32 @@ jobs:
         run: sudo apt-get install -y libayatana-appindicator3-dev
 
       - name: Build for Linux
-        run: GOOS=linux GOARCH=amd64 go build -o output/$GNU_BUILD_NAME cmd/main.go
+        run: GOOS=linux GOARCH=amd64 go build -o output/${{env.GNU_BUILD_NAME}} cmd/main.go
 
  #     - name: Build for Darwin
- #       run: GOOS=darwin GOARCH=amd64 go build -o output/webpcd-macos-x64 cmd/main.go 
+ #       run: GOOS=darwin GOARCH=amd64 go build -o output/${{env.MAC_BUILD_NAME}} cmd/main.go 
 
       - name: Build for Windows
-        run: GOOS=windows GOARCH=amd64 go build -o output/$WIN_BUILD_NAME cmd/main.go 
+        run: GOOS=windows GOARCH=amd64 go build -o output/${{env.WIN_BUILD_NAME}} cmd/main.go 
 
 
       - name: Attach Win Build
         uses: actions/upload-artifact@v3
         with:
-          name: $WIN_BUILD_NAME
-          path: output/$WIN_BUILD_NAME
+          name: ${{env.WIN_BUILD_NAME}}
+          path: output/${{env.WIN_BUILD_NAME}}
 
 #      - name: Attach Darwin Build
 #        uses: actions/upload-artifact@v3
 #        with:
-#          name: $MAC_BUILD_NAME
-#          path: output/$MAC_BUILD_NAME
+#          name: ${{env.MAC_BUILD_NAME}}
+#          path: output/${{env.MAC_BUILD_NAME}}
 
       - name: Attach Linux Build
         uses: actions/upload-artifact@v3
         with:
-          name: $GNU_BUILD_NAME
-          path: output/$GNU_BUILD_NAME
+          name: ${{env.GNU_BUILD_NAME}}
+          path: output/${{env.GNU_BUILD_NAME}}
         
 
 
