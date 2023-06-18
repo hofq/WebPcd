@@ -22,13 +22,13 @@ jobs:
         run: sudo apt-get install -y libayatana-appindicator3-dev
 
       - name: Build for Linux
-        run: GOOS=linux GOARCH=amd64 cd $GITHUB_WORKSPACE/ && go build -v ./...
+        run: GOOS=linux GOARCH=amd64  go build cmd/main.go -o webpcd-linux-x64
 
       - name: Build for Darwin
-        run: GOOS=darwin GOARCH=amd64 cd $GITHUB_WORKSPACE/ && go build -v ./...
+        run: GOOS=darwin GOARCH=amd64 go build cmd/main.go -o webpcd-macos-x64
 
       - name: Build for Windows
-        run: GOOS=windows GOARCH=amd64 cd $GITHUB_WORKSPACE/ && go build -v ./...
+        run: GOOS=windows GOARCH=amd64 go buildcmd/main.go webpcd-windows-x64.exe
 
 
       - name: Attach Artefacts
