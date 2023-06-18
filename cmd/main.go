@@ -10,10 +10,8 @@ import (
 
 func main() {
 	fmt.Println("Started Application")
-	var configpath string
+	flags()
 	// init
-	flag.StringVar(&configpath, "config", "./config.yaml", "path to config file")
-	flag.Parse()
 	systray := system.NewSystray()
 	go systray.Run()
 
@@ -24,4 +22,9 @@ func main() {
 	c := converter.New(configpath)
 	go c.Convert(f.Stream)
 	<-make(chan struct{})
+}
+
+func flags() {
+	flag.StringVar(nil, "foo", "bar", "placeholder")
+	flag.Parse()
 }

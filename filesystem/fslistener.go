@@ -7,13 +7,12 @@ import (
 	"path/filepath"
 
 	"github.com/fsnotify/fsnotify"
-	"gopkg.in/yaml.v2"
 )
 
 type FsRead struct {
 	Watcher   *fsnotify.Watcher
 	Stream    chan string
-	InputPath string `yaml:"InputPath"`
+	InputPath string
 }
 
 func NewWatcher(configpath string) *FsRead {
