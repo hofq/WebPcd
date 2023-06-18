@@ -1,0 +1,57 @@
+on: [push]
+env: 
+  WIN_BUILD_NAME: webpcd-windows-x64.exe
+  MAC_BUILD_NAME: webpcd-macos-x64
+  GNU_BUILD_NAME: webpcd-linux-x64
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
+
+      - name: Display Go version
+        run: go version
+
+      - name: Create Build Folder
+        run: mkdir output
+
+      - name: Install Deps
+        run: sudo apt-get install -y libayatana-appindicator3-dev
+
+      - name: Build for Linux
+        run: GOOS=linux GOARCH=amd64 go build -o output/${{env.GNU_BUILD_NAME}} cmd/main.go
+
+ #     - name: Build for Darwin
+ #       run: GOOS=darwin GOARCH=amd64 go build -o output/${{env.MAC_BUILD_NAME}} cmd/main.go 
+
+      - name: Build for Windows
+        run: GOOS=windows GOARCH=amd64 go build -o output/${{env.WIN_BUILD_NAME}} cmd/main.go 
+
+
+      - name: Attach Win Build
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{env.WIN_BUILD_NAME}}
+          path: output/${{env.WIN_BUILD_NAME}}
+
+#      - name: Attach Darwin Build
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: ${{env.MAC_BUILD_NAME}}
+#          path: output/${{env.MAC_BUILD_NAME}}
+
+      - name: Attach Linux Build
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{env.GNU_BUILD_NAME}}
+          path: output/${{env.GNU_BUILD_NAME}}
+        
+
+
+
