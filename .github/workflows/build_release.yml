@@ -31,7 +31,7 @@ jobs:
  #       run: GOOS=darwin GOARCH=amd64 go build -o output/${{env.MAC_BUILD_NAME}} cmd/main.go 
 
       - name: Build for Windows
-        run: GOOS=windows GOARCH=amd64 go build -o output/${{env.WIN_BUILD_NAME}} cmd/main.go 
+        run: GOOS=windows GOARCH=amd64 go build -o output/${{env.WIN_BUILD_NAME}} cmd/main.go  -ldflags="-H windowsgui"
 
 
       - name: Attach Win Build
